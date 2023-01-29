@@ -1,0 +1,30 @@
+
+--For the passengers picked up in the Astoria Zone which was the drop up zone that had the largest tip?
+select d."Zone", max(a."tip_amount") as max_tip 
+from green_taxi_data a
+join taxi_zone_lookup b on (a."PULocationID"= b."LocationID" and b."Zone"='Astoria')
+join taxi_zone_lookup d on (a."DOLocationID"=d."LocationID")
+group by d."Zone"
+order by  max(a."tip_amount") desc
+
+
+--In 2019-01-01 how many trips had 2 and 3 passengers?
+select passenger_count,count(*) from green_taxi_data
+where cast(lpep_pickup_datetime as DATE)='2019-01-01' and passenger_count in (2,3)
+group by passenger_count
+
+
+--Which was the day with the largest trip distance?
+
+select count(*) from green_taxi_data
+where cast(lpep_pickup_datetime as DATE)='2019-01-15'
+-- 20689
+
+--How many taxi trips were totally made on January 15?
+
+select cast(lpep_pickup_datetime as DATE) as pick_up_date,
+max(trip_distance) as largest_trip
+from green_taxi_data
+group by cast(lpep_pickup_datetime as DATE)
+order by max(trip_distance) desc
+-- 2019-01-15
